@@ -1,0 +1,16 @@
+{
+  "name": "@athlete/supabase-client",
+  "version": "0.0.1",
+  "private": true,
+  "main": "index.tsx",
+  "types": "index.tsx",
+  "dependencies": {
+    "@athlete/types": "workspace:*",
+    "@supabase/supabase-js": "^2.45.4",
+    "@react-native-async-storage/async-storage": "2.2.0"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  }
+}
