@@ -4,6 +4,7 @@
   "main": "expo-router/entry",
   "dependencies": {
     "@athlete/achievements": "workspace:*",
+    "@athlete/legal": "workspace:*",
     "@athlete/nutrition": "workspace:*",
     "@athlete/plan-templates": "workspace:*",
     "@athlete/supabase-client": "workspace:*",

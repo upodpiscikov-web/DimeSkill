@@ -4,8 +4,12 @@
   "private": true,
   "main": "index.tsx",
   "types": "index.tsx",
+  "dependencies": {
+    "@athlete/legal": "workspace:*"
+  },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "@expo/vector-icons": "*"
   }
 }

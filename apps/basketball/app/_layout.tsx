@@ -18,6 +18,9 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     if (isLoading) return
     const inAuthGroup = segments[0] === "(auth)"
     const inTabsGroup = segments[0] === "(tabs)"
+    const inLegalGroup = segments[0] === "legal"
+
+    if (inLegalGroup) return
 
     if (!session && !inAuthGroup) {
       router.replace("/(auth)/sign-in")

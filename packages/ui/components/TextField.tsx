@@ -12,6 +12,7 @@ export function TextField({
       <Text style={{ color: theme.textMuted, fontSize: theme.fontSize.sm }}>{label}</Text>
       <TextInput
         placeholderTextColor={theme.textMuted}
+        accessibilityLabel={label}
         style={{
           backgroundColor: theme.surfaceAlt,
           color: theme.text,

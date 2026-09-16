@@ -103,6 +103,9 @@ function Chip({
   return (
     <Pressable
       onPress={onPress}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: selected }}
+      accessibilityLabel={label}
       style={{
         paddingVertical: theme.spacing(0.75),
         paddingHorizontal: theme.spacing(1.5),

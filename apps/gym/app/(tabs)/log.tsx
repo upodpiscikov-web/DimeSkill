@@ -141,7 +141,12 @@ export default function LogSession() {
                 />
               </View>
               {sets.length > 1 && (
-                <Pressable onPress={() => removeSet(index)} style={{ padding: theme.spacing(1) }}>
+                <Pressable
+                  onPress={() => removeSet(index)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Remove set ${index + 1}`}
+                  style={{ padding: theme.spacing(1) }}
+                >
                   <Text style={{ color: theme.danger }}>Remove</Text>
                 </Pressable>
               )}
@@ -171,6 +176,9 @@ function Chip({
   return (
     <Pressable
       onPress={onPress}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: selected }}
+      accessibilityLabel={label}
       style={{
         paddingVertical: theme.spacing(0.75),
         paddingHorizontal: theme.spacing(1.5),

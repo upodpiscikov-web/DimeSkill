@@ -109,6 +109,8 @@ export default function ReactionDrill() {
               <Pressable
                 key={color.name}
                 onPress={() => handlePress(color.name)}
+                accessibilityRole="button"
+                accessibilityLabel={`Tap ${color.name}`}
                 style={{
                   flexBasis: "47%",
                   aspectRatio: 1.6,

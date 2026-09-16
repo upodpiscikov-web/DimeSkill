@@ -2,7 +2,9 @@ import { useState } from "react"
 import { Text, View } from "react-native"
 import { Link } from "expo-router"
 import { useSupabase } from "@athlete/supabase-client"
-import { Button, ScreenContainer, TextField, useTheme } from "@athlete/ui"
+import { Button, Checkbox, ScreenContainer, TextField, useTheme } from "@athlete/ui"
+import { LEGAL_DOCUMENT_VERSION } from "@athlete/legal"
+import { openLegalPage } from "../../lib/legal"
 
 export default function SignUp() {
   const supabase = useSupabase()
@@ -10,16 +12,27 @@ export default function SignUp() {
   const [displayName, setDisplayName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
   async function handleSignUp() {
-    setLoading(true)
     setError(null)
+    if (!agreedToTerms) {
+      setError("Please agree to the Terms & Conditions and Privacy Policy to continue.")
+      return
+    }
+    setLoading(true)
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { display_name: displayName } },
+      options: {
+        data: {
+          display_name: displayName,
+          terms_accepted_at: new Date().toISOString(),
+          terms_version: LEGAL_DOCUMENT_VERSION,
+        },
+      },
     })
     setLoading(false)
     if (error) setError(error.message)
@@ -43,6 +56,31 @@ export default function SignUp() {
           keyboardType="email-address"
         />
         <TextField label="Password" value={password} onChangeText={setPassword} secureTextEntry />
+
+        <Checkbox
+          checked={agreedToTerms}
+          onToggle={() => setAgreedToTerms((prev) => !prev)}
+          accessibilityLabel="I agree to the Terms & Conditions and Privacy Policy"
+          label={
+            <Text style={{ color: theme.textMuted, fontSize: theme.fontSize.sm, lineHeight: 20 }}>
+              I agree to the{" "}
+              <Text
+                onPress={() => openLegalPage("terms")}
+                style={{ color: theme.accent, fontWeight: "600" }}
+              >
+                Terms & Conditions
+              </Text>{" "}
+              and{" "}
+              <Text
+                onPress={() => openLegalPage("privacy")}
+                style={{ color: theme.accent, fontWeight: "600" }}
+              >
+                Privacy Policy
+              </Text>
+            </Text>
+          }
+        />
+
         {error && <Text style={{ color: theme.danger }}>{error}</Text>}
         <Button title="Sign Up" onPress={handleSignUp} loading={loading} />
         <Link href="/(auth)/sign-in" style={{ color: theme.textMuted, textAlign: "center" }}>

@@ -23,7 +23,7 @@ function buildTheme(accent: string, accentMuted: string): Theme {
     surfaceAlt: "#1F2630",
     text: "#F2F4F7",
     textMuted: "#8B96A5",
-    border: "#2A323D",
+    border: "#687687",
     success: "#3DDC97",
     danger: "#FF5C5C",
     spacing: (multiplier: number) => multiplier * 8,

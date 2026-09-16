@@ -380,6 +380,8 @@ export type Database = {
           id: string
           sex: Database["public"]["Enums"]["sex_type"]
           sport_focus: Database["public"]["Enums"]["sport_focus"]
+          terms_accepted_at: string | null
+          terms_version: string | null
           unit_pref: Database["public"]["Enums"]["unit_pref"]
           updated_at: string
           weekly_session_target: number
@@ -395,6 +397,8 @@ export type Database = {
           id: string
           sex?: Database["public"]["Enums"]["sex_type"]
           sport_focus?: Database["public"]["Enums"]["sport_focus"]
+          terms_accepted_at?: string | null
+          terms_version?: string | null
           unit_pref?: Database["public"]["Enums"]["unit_pref"]
           updated_at?: string
           weekly_session_target?: number
@@ -410,6 +414,8 @@ export type Database = {
           id?: string
           sex?: Database["public"]["Enums"]["sex_type"]
           sport_focus?: Database["public"]["Enums"]["sport_focus"]
+          terms_accepted_at?: string | null
+          terms_version?: string | null
           unit_pref?: Database["public"]["Enums"]["unit_pref"]
           updated_at?: string
           weekly_session_target?: number
