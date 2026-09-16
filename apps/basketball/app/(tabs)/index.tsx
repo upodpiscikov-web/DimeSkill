@@ -79,7 +79,7 @@ export default function Home() {
 
       <View style={{ flexDirection: "row", gap: theme.spacing(1.5) }}>
         <Pressable style={{ flex: 1 }} onPress={() => router.push("/(tabs)/history")}>
-          <Card style={{ alignItems: "center", justifyContent: "center", minHeight: 92 }}>
+          <Card style={{ flex: 1, alignItems: "center", justifyContent: "center", height: 92 }}>
             <Text
               style={{
                 color: theme.text,
@@ -93,7 +93,7 @@ export default function Home() {
           </Card>
         </Pressable>
         <Pressable style={{ flex: 1 }} onPress={() => router.push("/(tabs)/achievements")}>
-          <Card style={{ alignItems: "center", justifyContent: "center", minHeight: 92 }}>
+          <Card style={{ flex: 1, alignItems: "center", justifyContent: "center", height: 92 }}>
             <Text
               style={{
                 color: theme.text,
@@ -102,7 +102,7 @@ export default function Home() {
                 textAlign: "center",
               }}
             >
-              Achievements{"\n"}and PR's
+              Achievements
             </Text>
           </Card>
         </Pressable>
