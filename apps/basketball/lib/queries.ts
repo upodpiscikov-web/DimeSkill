@@ -270,6 +270,59 @@ export function useProfile() {
   })
 }
 
+export function useFoodLogEntries(date: string) {
+  const supabase = useSupabase()
+  const { session } = useSession()
+  return useQuery({
+    queryKey: ["food_log_entries", session?.user.id, date],
+    enabled: !!session,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("food_log_entries")
+        .select("*")
+        .eq("logged_date", date)
+        .order("created_at", { ascending: true })
+      if (error) throw error
+      return data
+    },
+  })
+}
+
+export function useCreateFoodLogEntry() {
+  const supabase = useSupabase()
+  const { session } = useSession()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (input: Omit<TablesInsert<"food_log_entries">, "user_id">) => {
+      if (!session) throw new Error("Not signed in")
+      const { data, error } = await supabase
+        .from("food_log_entries")
+        .insert({ ...input, user_id: session.user.id })
+        .select()
+        .single()
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["food_log_entries"] })
+    },
+  })
+}
+
+export function useDeleteFoodLogEntry() {
+  const supabase = useSupabase()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("food_log_entries").delete().eq("id", id)
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["food_log_entries"] })
+    },
+  })
+}
+
 export function useUpdateProfile() {
   const supabase = useSupabase()
   const { session } = useSession()

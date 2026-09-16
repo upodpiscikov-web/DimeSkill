@@ -5,9 +5,14 @@ import type { PlanTemplate } from "@athlete/plan-templates"
 import {
   useActiveTrainingPlan,
   useBasketballSessions,
+  useFoodLogEntries,
   useProfile,
   useUserAchievements,
 } from "../../lib/queries"
+
+function todayIso() {
+  return new Date().toISOString().slice(0, 10)
+}
 
 export default function Home() {
   const theme = useTheme()
@@ -15,6 +20,8 @@ export default function Home() {
   const { data: profile } = useProfile()
   const { data: earned } = useUserAchievements()
   const activePlan = useActiveTrainingPlan()
+  const { data: foodEntries } = useFoodLogEntries(todayIso())
+  const caloriesToday = (foodEntries ?? []).reduce((sum, e) => sum + e.calories, 0)
 
   const sessionCount = sessions?.length ?? 0
   const thisWeekCount =
@@ -75,6 +82,22 @@ export default function Home() {
             <Button title="Choose a Plan" variant="secondary" onPress={() => router.push("/plan")} />
           </View>
         )}
+      </Card>
+      <Card>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <Text style={{ color: theme.text, fontSize: theme.fontSize.md, fontWeight: "600" }}>
+            Nutrition Today
+          </Text>
+          <Text
+            onPress={() => router.push("/nutrition")}
+            style={{ color: theme.accent, fontWeight: "600" }}
+          >
+            Log Food
+          </Text>
+        </View>
+        <Text style={{ color: theme.textMuted, marginTop: theme.spacing(1) }}>
+          {caloriesToday} kcal logged today
+        </Text>
       </Card>
       <Card>
         <Text
