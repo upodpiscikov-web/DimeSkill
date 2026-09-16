@@ -7,7 +7,13 @@ type BadgeTone = "accent" | "success" | "danger" | "neutral"
 export function Badge({ label, tone = "neutral" }: { label: string; tone?: BadgeTone }) {
   const theme = useTheme()
   const color =
-    tone === "accent" ? theme.accent : tone === "success" ? theme.success : tone === "danger" ? theme.danger : theme.textMuted
+    tone === "accent"
+      ? theme.accentText
+      : tone === "success"
+        ? theme.success
+        : tone === "danger"
+          ? theme.danger
+          : theme.textMuted
 
   return (
     <View
@@ -17,11 +23,20 @@ export function Badge({ label, tone = "neutral" }: { label: string; tone?: Badge
         borderRadius: theme.radius.pill,
         paddingVertical: theme.spacing(0.5),
         paddingHorizontal: theme.spacing(1.25),
-        borderWidth: 1,
+        borderWidth: theme.borderWidth > 1 ? 2 : 1,
         borderColor: color,
       }}
     >
-      <Text style={{ color, fontSize: theme.fontSize.xs, fontWeight: "600" }}>{label}</Text>
+      <Text
+        style={{
+          color,
+          fontSize: theme.fontSize.xs,
+          fontWeight: "700",
+          fontFamily: theme.fontFamily.bold,
+        }}
+      >
+        {label}
+      </Text>
     </View>
   )
 }

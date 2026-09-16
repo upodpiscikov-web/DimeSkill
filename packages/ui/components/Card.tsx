@@ -9,9 +9,10 @@ export function Card({ children, style }: { children: React.ReactNode; style?: V
       style={{
         backgroundColor: theme.surface,
         borderRadius: theme.radius.lg,
-        borderWidth: 1,
+        borderWidth: theme.borderWidth,
         borderColor: theme.border,
         padding: theme.spacing(2),
+        ...theme.shadow,
         ...style,
       }}
     >

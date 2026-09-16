@@ -113,6 +113,7 @@ export default function SessionDetail() {
                 color: theme.text,
                 fontSize: theme.fontSize.xl,
                 fontWeight: "700",
+                fontFamily: theme.fontFamily.extrabold,
                 textTransform: "capitalize",
               }}
             >
@@ -206,7 +207,7 @@ export default function SessionDetail() {
         </>
       ) : (
         <>
-          <Text style={{ color: theme.text, fontSize: theme.fontSize.xl, fontWeight: "700" }}>
+          <Text style={{ color: theme.text, fontSize: theme.fontSize.xl, fontWeight: "700", fontFamily: theme.fontFamily.extrabold }}>
             Edit Session
           </Text>
           <Card>

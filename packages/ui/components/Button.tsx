@@ -21,8 +21,12 @@ export function Button({
   const isDisabled = disabled || loading
 
   const backgroundColor =
-    variant === "primary" ? theme.accent : variant === "secondary" ? theme.surfaceAlt : "transparent"
-  const textColor = variant === "primary" ? "#111318" : theme.text
+    variant === "primary"
+      ? theme.primarySurface
+      : variant === "secondary"
+        ? theme.surfaceAlt
+        : "transparent"
+  const textColor = variant === "primary" ? theme.onPrimarySurface : theme.text
 
   return (
     <Pressable
@@ -39,14 +43,22 @@ export function Button({
         borderRadius: theme.radius.md,
         alignItems: "center",
         justifyContent: "center",
-        borderWidth: variant === "ghost" ? 1 : 0,
+        borderWidth: variant === "primary" ? 0 : theme.borderWidth,
         borderColor: theme.border,
+        ...(variant === "primary" ? theme.shadow : null),
       })}
     >
       {loading ? (
         <ActivityIndicator color={textColor} />
       ) : (
-        <Text style={{ color: textColor, fontSize: theme.fontSize.md, fontWeight: "600" }}>
+        <Text
+          style={{
+            color: textColor,
+            fontSize: theme.fontSize.md,
+            fontWeight: "700",
+            fontFamily: theme.fontFamily.bold,
+          }}
+        >
           {title}
         </Text>
       )}

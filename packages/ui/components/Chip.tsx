@@ -22,12 +22,19 @@ export function Chip({
         paddingVertical: theme.spacing(0.75),
         paddingHorizontal: theme.spacing(1.5),
         borderRadius: theme.radius.pill,
-        backgroundColor: selected ? theme.accent : theme.surfaceAlt,
-        borderWidth: 1,
-        borderColor: selected ? theme.accent : theme.border,
+        backgroundColor: selected ? theme.primarySurface : theme.surfaceAlt,
+        borderWidth: theme.borderWidth,
+        borderColor: selected ? theme.primarySurface : theme.border,
       }}
     >
-      <Text style={{ color: selected ? "#111318" : theme.text, textTransform: "capitalize" }}>
+      <Text
+        style={{
+          color: selected ? theme.onPrimarySurface : theme.text,
+          textTransform: "capitalize",
+          fontFamily: theme.fontFamily.semibold,
+          fontWeight: "600",
+        }}
+      >
         {label}
       </Text>
     </Pressable>

@@ -7,12 +7,21 @@ export function StatTile({ label, value, accent = false }: { label: string; valu
   const theme = useTheme()
   return (
     <Card style={{ flex: 1, alignItems: "flex-start", gap: theme.spacing(0.5) }}>
-      <Text style={{ color: theme.textMuted, fontSize: theme.fontSize.xs }}>{label}</Text>
       <Text
         style={{
-          color: accent ? theme.accent : theme.text,
+          color: theme.textMuted,
+          fontSize: theme.fontSize.xs,
+          fontFamily: theme.fontFamily.medium,
+        }}
+      >
+        {label}
+      </Text>
+      <Text
+        style={{
+          color: accent ? theme.accentText : theme.text,
           fontSize: theme.fontSize.xl,
-          fontWeight: "700",
+          fontWeight: "800",
+          fontFamily: theme.fontFamily.extrabold,
         }}
       >
         {value}

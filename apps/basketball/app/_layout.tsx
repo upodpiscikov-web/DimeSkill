@@ -1,8 +1,17 @@
 import { useEffect } from "react"
 import { Stack, useRouter, useSegments } from "expo-router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ActivityIndicator } from "react-native"
+import {
+  useFonts,
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_500Medium,
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_700Bold,
+  PlusJakartaSans_800ExtraBold,
+} from "@expo-google-fonts/plus-jakarta-sans"
 import { SupabaseProvider, useSession } from "@athlete/supabase-client"
-import { ThemeProvider, basketballTheme } from "@athlete/ui"
+import { ThemeProvider, basketballTheme, useTheme } from "@athlete/ui"
 
 const queryClient = new QueryClient()
 
@@ -23,7 +32,8 @@ function AuthGate({ children }: { children: React.ReactNode }) {
       segments[0] === "edit-profile" ||
       segments[0] === "session" ||
       segments[0] === "plan" ||
-      segments[0] === "nutrition"
+      segments[0] === "nutrition" ||
+      segments[0] === "workout"
 
     if (inLegalGroup) return
 
@@ -38,15 +48,32 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
+function LoadingScreen() {
+  const theme = useTheme()
+  return <ActivityIndicator color={theme.accent} style={{ flex: 1 }} />
+}
+
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    PlusJakartaSans_400Regular,
+    PlusJakartaSans_500Medium,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_700Bold,
+    PlusJakartaSans_800ExtraBold,
+  })
+
   return (
     <SupabaseProvider url={SUPABASE_URL} anonKey={SUPABASE_ANON_KEY}>
       <ThemeProvider theme={basketballTheme}>
-        <QueryClientProvider client={queryClient}>
-          <AuthGate>
-            <Stack screenOptions={{ headerShown: false }} />
-          </AuthGate>
-        </QueryClientProvider>
+        {!fontsLoaded ? (
+          <LoadingScreen />
+        ) : (
+          <QueryClientProvider client={queryClient}>
+            <AuthGate>
+              <Stack screenOptions={{ headerShown: false }} />
+            </AuthGate>
+          </QueryClientProvider>
+        )}
       </ThemeProvider>
     </SupabaseProvider>
   )

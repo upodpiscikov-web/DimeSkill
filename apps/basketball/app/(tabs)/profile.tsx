@@ -25,7 +25,7 @@ export default function Profile() {
 
   return (
     <ScreenContainer>
-      <Text style={{ color: theme.text, fontSize: theme.fontSize.xl, fontWeight: "700" }}>
+      <Text style={{ color: theme.text, fontSize: theme.fontSize.xl, fontWeight: "700", fontFamily: theme.fontFamily.extrabold }}>
         Profile
       </Text>
       <Card>

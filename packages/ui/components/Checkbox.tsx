@@ -30,18 +30,25 @@ export function Checkbox({
           height: 22,
           borderRadius: theme.radius.sm,
           borderWidth: 2,
-          borderColor: checked ? theme.accent : theme.border,
-          backgroundColor: checked ? theme.accent : "transparent",
+          borderColor: checked ? theme.primarySurface : theme.border,
+          backgroundColor: checked ? theme.primarySurface : "transparent",
           alignItems: "center",
           justifyContent: "center",
           marginTop: 2,
         }}
       >
-        {checked && <Ionicons name="checkmark" size={16} color="#111318" />}
+        {checked && <Ionicons name="checkmark" size={16} color={theme.onPrimarySurface} />}
       </View>
       <View style={{ flex: 1 }}>
         {typeof label === "string" ? (
-          <Text style={{ color: theme.textMuted, fontSize: theme.fontSize.sm, lineHeight: 20 }}>
+          <Text
+            style={{
+              color: theme.textMuted,
+              fontSize: theme.fontSize.sm,
+              lineHeight: 20,
+              fontFamily: theme.fontFamily.regular,
+            }}
+          >
             {label}
           </Text>
         ) : (

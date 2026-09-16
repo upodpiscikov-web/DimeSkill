@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Pressable, Text, View } from "react-native"
-import { router } from "expo-router"
+import { router, useLocalSearchParams } from "expo-router"
 import { ScreenContainer, TextField, Button, Card, Chip, useTheme } from "@athlete/ui"
 import { useCreateBasketballSession, useCreateBasketballDrills } from "../../lib/queries"
 import type { Enums } from "@athlete/types"
@@ -19,15 +19,20 @@ const EMPTY_DRILL: DrillRow = { name: "", reps: "", makes: "", durationSec: "" }
 
 export default function LogSession() {
   const theme = useTheme()
+  const { focusDrill } = useLocalSearchParams<{ focusDrill?: string }>()
   const createSession = useCreateBasketballSession()
   const createDrills = useCreateBasketballDrills()
-  const [sessionType, setSessionType] = useState<Enums<"basketball_session_type">>("practice")
+  const [sessionType, setSessionType] = useState<Enums<"basketball_session_type">>(
+    focusDrill ? "drills" : "practice"
+  )
   const [duration, setDuration] = useState("60")
   const [shotsMade, setShotsMade] = useState("")
   const [shotsAttempted, setShotsAttempted] = useState("")
   const [pointsScored, setPointsScored] = useState("")
   const [notes, setNotes] = useState("")
-  const [drills, setDrills] = useState<DrillRow[]>([])
+  const [drills, setDrills] = useState<DrillRow[]>(
+    focusDrill ? [{ ...EMPTY_DRILL, name: focusDrill }] : []
+  )
   const [error, setError] = useState<string | null>(null)
 
   function updateDrill(index: number, field: keyof DrillRow, value: string) {
@@ -104,7 +109,7 @@ export default function LogSession() {
 
   return (
     <ScreenContainer>
-      <Text style={{ color: theme.text, fontSize: theme.fontSize.xl, fontWeight: "700" }}>
+      <Text style={{ color: theme.text, fontSize: theme.fontSize.xl, fontWeight: "700", fontFamily: theme.fontFamily.extrabold }}>
         Log a Session
       </Text>
       <Card>

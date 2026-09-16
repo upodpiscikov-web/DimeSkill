@@ -10,7 +10,7 @@ export default function Achievements() {
 
   return (
     <ScreenContainer scroll={false}>
-      <Text style={{ color: theme.text, fontSize: theme.fontSize.xl, fontWeight: "700" }}>
+      <Text style={{ color: theme.text, fontSize: theme.fontSize.xl, fontWeight: "700", fontFamily: theme.fontFamily.extrabold }}>
         Achievements
       </Text>
       <FlatList

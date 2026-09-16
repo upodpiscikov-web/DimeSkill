@@ -46,7 +46,7 @@ export default function Plan() {
       >
         ‹ Back
       </Text>
-      <Text style={{ color: theme.text, fontSize: theme.fontSize.xl, fontWeight: "700" }}>
+      <Text style={{ color: theme.text, fontSize: theme.fontSize.xl, fontWeight: "700", fontFamily: theme.fontFamily.extrabold }}>
         Training Plan
       </Text>
 

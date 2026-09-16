@@ -1,4 +1,5 @@
-import { Text, View } from "react-native"
+import { Image, Pressable, Text, View } from "react-native"
+import { Ionicons } from "@expo/vector-icons"
 import { router } from "expo-router"
 import { ScreenContainer, Card, StatRow, StatTile, Badge, Button, useTheme } from "@athlete/ui"
 import type { PlanTemplate } from "@athlete/plan-templates"
@@ -33,21 +34,111 @@ export default function Home() {
 
   return (
     <ScreenContainer>
-      <Text style={{ color: theme.text, fontSize: theme.fontSize.xxl, fontWeight: "700" }}>
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+        <Image
+          source={require("../../assets/logo-wide.png")}
+          style={{ width: 150, height: 44 }}
+          resizeMode="contain"
+          accessibilityLabel="DimeSkill"
+        />
+      </View>
+
+      <Text
+        style={{
+          color: theme.text,
+          fontSize: theme.fontSize.lg,
+          fontFamily: theme.fontFamily.semibold,
+          fontWeight: "600",
+        }}
+      >
         {profile?.display_name ? `Hey, ${profile.display_name}` : "Welcome"}
       </Text>
+
+      <View style={{ alignItems: "center", marginVertical: theme.spacing(1) }}>
+        <Pressable
+          onPress={() => router.push("/workout")}
+          accessibilityRole="button"
+          accessibilityLabel="Start a workout"
+          style={({ pressed }) => ({
+            width: 168,
+            height: 168,
+            borderRadius: 999,
+            backgroundColor: theme.primarySurface,
+            borderWidth: 5,
+            borderColor: theme.accent,
+            alignItems: "center",
+            justifyContent: "center",
+            opacity: pressed ? 0.9 : 1,
+            ...theme.shadow,
+          })}
+        >
+          <Ionicons name="play" color={theme.onPrimarySurface} size={44} />
+          <Text
+            style={{
+              color: theme.onPrimarySurface,
+              fontFamily: theme.fontFamily.extrabold,
+              fontWeight: "800",
+              fontSize: theme.fontSize.md,
+              marginTop: theme.spacing(0.5),
+              textTransform: "lowercase",
+            }}
+          >
+            workout
+          </Text>
+        </Pressable>
+      </View>
+
+      <View style={{ flexDirection: "row", gap: theme.spacing(1.5) }}>
+        <Pressable style={{ flex: 1 }} onPress={() => router.push("/(tabs)/history")}>
+          <Card style={{ alignItems: "center", justifyContent: "center", minHeight: 92 }}>
+            <Text
+              style={{
+                color: theme.text,
+                fontFamily: theme.fontFamily.extrabold,
+                fontWeight: "800",
+                textAlign: "center",
+              }}
+            >
+              Drills
+            </Text>
+          </Card>
+        </Pressable>
+        <Pressable style={{ flex: 1 }} onPress={() => router.push("/(tabs)/achievements")}>
+          <Card style={{ alignItems: "center", justifyContent: "center", minHeight: 92 }}>
+            <Text
+              style={{
+                color: theme.text,
+                fontFamily: theme.fontFamily.extrabold,
+                fontWeight: "800",
+                textAlign: "center",
+              }}
+            >
+              Achievements{"\n"}and PR's
+            </Text>
+          </Card>
+        </Pressable>
+      </View>
+
       <StatRow>
         <StatTile label="This Week" value={`${thisWeekCount}/${target}`} accent />
         <StatTile label="Total Sessions" value={String(sessionCount)} />
       </StatRow>
+
       <Card>
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <Text style={{ color: theme.text, fontSize: theme.fontSize.md, fontWeight: "600" }}>
+          <Text
+            style={{
+              color: theme.text,
+              fontSize: theme.fontSize.md,
+              fontFamily: theme.fontFamily.bold,
+              fontWeight: "700",
+            }}
+          >
             Today's Training
           </Text>
           <Text
             onPress={() => router.push("/plan")}
-            style={{ color: theme.accent, fontWeight: "600" }}
+            style={{ color: theme.accentText, fontFamily: theme.fontFamily.bold, fontWeight: "700" }}
           >
             {activePlan ? "View Plan" : "Choose a Plan"}
           </Text>
@@ -57,15 +148,21 @@ export default function Home() {
             const template = activePlan.plan_json as unknown as PlanTemplate
             const daysSinceStart = Math.max(
               0,
-              Math.floor(
-                (Date.now() - new Date(activePlan.start_date).getTime()) / 86400000
-              )
+              Math.floor((Date.now() - new Date(activePlan.start_date).getTime()) / 86400000)
             )
             const dayIndex = daysSinceStart % template.sessionsPerWeek
             const today = template.days[dayIndex]
             return (
               <View style={{ marginTop: theme.spacing(1) }}>
-                <Text style={{ color: theme.accent, fontWeight: "700" }}>{today.focus}</Text>
+                <Text
+                  style={{
+                    color: theme.accentText,
+                    fontFamily: theme.fontFamily.bold,
+                    fontWeight: "700",
+                  }}
+                >
+                  {today.focus}
+                </Text>
                 {today.blocks.map((block, index) => (
                   <Text key={index} style={{ color: theme.textMuted, marginTop: theme.spacing(0.5) }}>
                     {block.name} · {block.details}
@@ -83,14 +180,22 @@ export default function Home() {
           </View>
         )}
       </Card>
+
       <Card>
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <Text style={{ color: theme.text, fontSize: theme.fontSize.md, fontWeight: "600" }}>
+          <Text
+            style={{
+              color: theme.text,
+              fontSize: theme.fontSize.md,
+              fontFamily: theme.fontFamily.bold,
+              fontWeight: "700",
+            }}
+          >
             Nutrition Today
           </Text>
           <Text
             onPress={() => router.push("/nutrition")}
-            style={{ color: theme.accent, fontWeight: "600" }}
+            style={{ color: theme.accentText, fontFamily: theme.fontFamily.bold, fontWeight: "700" }}
           >
             Log Food
           </Text>
@@ -99,12 +204,14 @@ export default function Home() {
           {caloriesToday} kcal logged today
         </Text>
       </Card>
+
       <Card>
         <Text
           style={{
             color: theme.text,
             fontSize: theme.fontSize.md,
-            fontWeight: "600",
+            fontFamily: theme.fontFamily.bold,
+            fontWeight: "700",
             marginBottom: theme.spacing(1),
           }}
         >
