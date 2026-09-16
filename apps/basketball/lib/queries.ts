@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useSupabase, useSession } from "@athlete/supabase-client"
-import type { TablesInsert } from "@athlete/types"
+import type { TablesInsert, TablesUpdate } from "@athlete/types"
 
 export function useBasketballSessions() {
   const supabase = useSupabase()
@@ -103,7 +103,11 @@ export function useAllAchievements() {
   return useQuery({
     queryKey: ["achievements"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("achievements").select("*").order("created_at")
+      const { data, error } = await supabase
+        .from("achievements")
+        .select("*")
+        .in("sport", ["basketball", "both"])
+        .order("created_at")
       if (error) throw error
       return data
     },
@@ -124,6 +128,28 @@ export function useProfile() {
         .single()
       if (error) throw error
       return data
+    },
+  })
+}
+
+export function useUpdateProfile() {
+  const supabase = useSupabase()
+  const { session } = useSession()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (input: TablesUpdate<"profiles">) => {
+      if (!session) throw new Error("Not signed in")
+      const { data, error } = await supabase
+        .from("profiles")
+        .update(input)
+        .eq("id", session.user.id)
+        .select()
+        .single()
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["profile"] })
     },
   })
 }

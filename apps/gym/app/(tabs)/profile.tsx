@@ -1,9 +1,14 @@
 import { Pressable, Text, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
+import { router } from "expo-router"
 import { ScreenContainer, Card, Button, useTheme } from "@athlete/ui"
 import { useSupabase, useSession } from "@athlete/supabase-client"
 import { useProfile } from "../../lib/queries"
 import { openLegalPage, type LegalPage } from "../../lib/legal"
+
+function humanize(value: string) {
+  return value.replace(/_/g, " ")
+}
 
 const LEGAL_LINKS: { page: LegalPage; label: string }[] = [
   { page: "privacy", label: "Privacy Policy" },
@@ -28,7 +33,12 @@ export default function Profile() {
         <Text style={{ color: theme.text, fontSize: theme.fontSize.md }}>{session?.user.email}</Text>
       </Card>
       <Card>
-        <Text style={{ color: theme.textMuted }}>Display name</Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <Text style={{ color: theme.text, fontWeight: "600" }}>Display name</Text>
+          <Pressable onPress={() => router.push("/edit-profile")} accessibilityRole="button" accessibilityLabel="Edit Profile">
+            <Text style={{ color: theme.accent, fontWeight: "600" }}>Edit</Text>
+          </Pressable>
+        </View>
         <Text style={{ color: theme.text, fontSize: theme.fontSize.md }}>
           {profile?.display_name ?? "-"}
         </Text>
@@ -37,6 +47,22 @@ export default function Profile() {
         </Text>
         <Text style={{ color: theme.text, fontSize: theme.fontSize.md }}>
           {profile?.weekly_session_target ?? "-"}
+        </Text>
+        <Text style={{ color: theme.textMuted, marginTop: theme.spacing(1) }}>Height / Weight</Text>
+        <Text style={{ color: theme.text, fontSize: theme.fontSize.md }}>
+          {profile?.height_cm ?? "-"} cm / {profile?.weight_kg ?? "-"} kg
+        </Text>
+        <Text style={{ color: theme.textMuted, marginTop: theme.spacing(1) }}>
+          Training objective
+        </Text>
+        <Text style={{ color: theme.text, fontSize: theme.fontSize.md, textTransform: "capitalize" }}>
+          {profile ? humanize(profile.goal) : "-"}
+        </Text>
+        <Text style={{ color: theme.textMuted, marginTop: theme.spacing(1) }}>
+          Experience level
+        </Text>
+        <Text style={{ color: theme.text, fontSize: theme.fontSize.md, textTransform: "capitalize" }}>
+          {profile ? humanize(profile.experience_level) : "-"}
         </Text>
       </Card>
 

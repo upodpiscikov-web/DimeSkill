@@ -375,6 +375,7 @@ export type Database = {
           birth_date: string | null
           created_at: string
           display_name: string | null
+          experience_level: Database["public"]["Enums"]["experience_level"]
           goal: Database["public"]["Enums"]["training_goal"]
           height_cm: number | null
           id: string
@@ -392,6 +393,7 @@ export type Database = {
           birth_date?: string | null
           created_at?: string
           display_name?: string | null
+          experience_level?: Database["public"]["Enums"]["experience_level"]
           goal?: Database["public"]["Enums"]["training_goal"]
           height_cm?: number | null
           id: string
@@ -409,6 +411,7 @@ export type Database = {
           birth_date?: string | null
           created_at?: string
           display_name?: string | null
+          experience_level?: Database["public"]["Enums"]["experience_level"]
           goal?: Database["public"]["Enums"]["training_goal"]
           height_cm?: number | null
           id?: string
@@ -542,6 +545,7 @@ export type Database = {
         | "shooting"
         | "drills"
         | "conditioning"
+      experience_level: "beginner" | "intermediate" | "advanced"
       gym_session_type: "strength" | "cardio" | "mobility" | "sport_specific"
       message_role: "user" | "assistant" | "system"
       milestone_type:
@@ -677,6 +681,7 @@ export const Constants = {
         "drills",
         "conditioning",
       ],
+      experience_level: ["beginner", "intermediate", "advanced"],
       gym_session_type: ["strength", "cardio", "mobility", "sport_specific"],
       message_role: ["user", "assistant", "system"],
       milestone_type: [

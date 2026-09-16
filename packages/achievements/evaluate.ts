@@ -14,18 +14,40 @@ export type UserStatsSnapshot = {
   streakDaysLast7: number
   bestReactionMs: number | null
   hasPersonalRecord: boolean
+  /** Best single-session shooting percentage (0-1) among sessions with at least 10 attempts. */
+  bestShootingPctMin10: number | null
+  /** Best single-session shooting percentage (0-1) among sessions with at least 15 attempts. */
+  bestShootingPctMin15: number | null
+  /** Highest points scored in a single session with session_type "game". */
+  bestGamePoints: number | null
+  /** Highest weight (kg) ever logged for a set whose exercise name matches "bench". */
+  bestBenchKg: number | null
+  /** Highest weight (kg) ever logged for a set whose exercise name matches "squat". */
+  bestSquatKg: number | null
+  /** Highest weight (kg) ever logged for a set whose exercise name matches "deadlift". */
+  bestDeadliftKg: number | null
 }
 
 type SessionCountCriteria = { type: "session_count"; sport: "basketball" | "gym"; count: number }
 type StreakCriteria = { type: "streak"; days: number }
 type ReactionTimeCriteria = { type: "reaction_time"; max_ms: number }
 type PrCriteria = { type: "pr" }
+type ShootingPctCriteria = { type: "shooting_pct"; min_attempts: number; min_pct: number }
+type SingleGamePointsCriteria = { type: "single_game_points"; min_points: number }
+type LiftWeightCriteria = {
+  type: "lift_weight"
+  exercise_pattern: "bench" | "squat" | "deadlift"
+  min_kg: number
+}
 
 export type AchievementCriteria =
   | SessionCountCriteria
   | StreakCriteria
   | ReactionTimeCriteria
   | PrCriteria
+  | ShootingPctCriteria
+  | SingleGamePointsCriteria
+  | LiftWeightCriteria
 
 function isCriteriaMet(criteria: AchievementCriteria, stats: UserStatsSnapshot): boolean {
   switch (criteria.type) {
@@ -40,6 +62,22 @@ function isCriteriaMet(criteria: AchievementCriteria, stats: UserStatsSnapshot):
       return stats.bestReactionMs !== null && stats.bestReactionMs <= criteria.max_ms
     case "pr":
       return stats.hasPersonalRecord
+    case "shooting_pct": {
+      const best =
+        criteria.min_attempts >= 15 ? stats.bestShootingPctMin15 : stats.bestShootingPctMin10
+      return best !== null && best >= criteria.min_pct
+    }
+    case "single_game_points":
+      return stats.bestGamePoints !== null && stats.bestGamePoints >= criteria.min_points
+    case "lift_weight": {
+      const best =
+        criteria.exercise_pattern === "bench"
+          ? stats.bestBenchKg
+          : criteria.exercise_pattern === "squat"
+            ? stats.bestSquatKg
+            : stats.bestDeadliftKg
+      return best !== null && best >= criteria.min_kg
+    }
     default:
       return false
   }

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Pressable, Text, View } from "react-native"
 import { router } from "expo-router"
-import { ScreenContainer, TextField, Button, Card, useTheme } from "@athlete/ui"
+import { ScreenContainer, TextField, Button, Card, Chip, useTheme } from "@athlete/ui"
 import { useCreateGymSession } from "../../lib/queries"
 import type { Enums } from "@athlete/types"
 
@@ -160,37 +160,5 @@ export default function LogSession() {
       {error && <Text style={{ color: theme.danger }}>{error}</Text>}
       <Button title="Save Session" onPress={handleSubmit} loading={createSession.isPending} />
     </ScreenContainer>
-  )
-}
-
-function Chip({
-  label,
-  selected,
-  onPress,
-}: {
-  label: string
-  selected: boolean
-  onPress: () => void
-}) {
-  const theme = useTheme()
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="radio"
-      accessibilityState={{ checked: selected }}
-      accessibilityLabel={label}
-      style={{
-        paddingVertical: theme.spacing(0.75),
-        paddingHorizontal: theme.spacing(1.5),
-        borderRadius: theme.radius.pill,
-        backgroundColor: selected ? theme.accent : theme.surfaceAlt,
-        borderWidth: 1,
-        borderColor: selected ? theme.accent : theme.border,
-      }}
-    >
-      <Text style={{ color: selected ? "#111318" : theme.text, textTransform: "capitalize" }}>
-        {label}
-      </Text>
-    </Pressable>
   )
 }

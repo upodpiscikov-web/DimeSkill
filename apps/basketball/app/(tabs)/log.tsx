@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { Pressable, Text, View } from "react-native"
+import { Text, View } from "react-native"
 import { router } from "expo-router"
-import { ScreenContainer, TextField, Button, Card, useTheme } from "@athlete/ui"
+import { ScreenContainer, TextField, Button, Card, Chip, useTheme } from "@athlete/ui"
 import { useCreateBasketballSession } from "../../lib/queries"
 import type { Enums } from "@athlete/types"
 
@@ -20,6 +20,7 @@ export default function LogSession() {
   const [duration, setDuration] = useState("60")
   const [shotsMade, setShotsMade] = useState("")
   const [shotsAttempted, setShotsAttempted] = useState("")
+  const [pointsScored, setPointsScored] = useState("")
   const [notes, setNotes] = useState("")
   const [error, setError] = useState<string | null>(null)
 
@@ -31,11 +32,13 @@ export default function LogSession() {
         duration_min: Number(duration) || 0,
         shots_made: shotsMade ? Number(shotsMade) : null,
         shots_attempted: shotsAttempted ? Number(shotsAttempted) : null,
+        points_scored: pointsScored ? Number(pointsScored) : null,
         notes: notes || null,
       })
       setDuration("60")
       setShotsMade("")
       setShotsAttempted("")
+      setPointsScored("")
       setNotes("")
       router.push("/(tabs)/history")
     } catch (e: any) {
@@ -83,41 +86,16 @@ export default function LogSession() {
         keyboardType="numeric"
         placeholder="optional"
       />
+      <TextField
+        label="Points Scored"
+        value={pointsScored}
+        onChangeText={setPointsScored}
+        keyboardType="numeric"
+        placeholder="optional"
+      />
       <TextField label="Notes" value={notes} onChangeText={setNotes} placeholder="optional" multiline />
       {error && <Text style={{ color: theme.danger }}>{error}</Text>}
       <Button title="Save Session" onPress={handleSubmit} loading={createSession.isPending} />
     </ScreenContainer>
-  )
-}
-
-function Chip({
-  label,
-  selected,
-  onPress,
-}: {
-  label: string
-  selected: boolean
-  onPress: () => void
-}) {
-  const theme = useTheme()
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="radio"
-      accessibilityState={{ checked: selected }}
-      accessibilityLabel={label}
-      style={{
-        paddingVertical: theme.spacing(0.75),
-        paddingHorizontal: theme.spacing(1.5),
-        borderRadius: theme.radius.pill,
-        backgroundColor: selected ? theme.accent : theme.surfaceAlt,
-        borderWidth: 1,
-        borderColor: selected ? theme.accent : theme.border,
-      }}
-    >
-      <Text style={{ color: selected ? "#111318" : theme.text, textTransform: "capitalize" }}>
-        {label}
-      </Text>
-    </Pressable>
   )
 }

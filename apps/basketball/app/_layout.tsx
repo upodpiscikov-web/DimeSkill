@@ -19,12 +19,13 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     const inAuthGroup = segments[0] === "(auth)"
     const inTabsGroup = segments[0] === "(tabs)"
     const inLegalGroup = segments[0] === "legal"
+    const isStandaloneAuthedRoute = segments[0] === "edit-profile"
 
     if (inLegalGroup) return
 
     if (!session && !inAuthGroup) {
       router.replace("/(auth)/sign-in")
-    } else if (session && !inTabsGroup) {
+    } else if (session && !inTabsGroup && !isStandaloneAuthedRoute) {
       router.replace("/(tabs)")
     }
   }, [session, isLoading, segments])
