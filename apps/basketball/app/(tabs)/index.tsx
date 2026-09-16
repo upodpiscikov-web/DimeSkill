@@ -43,17 +43,6 @@ export default function Home() {
         />
       </View>
 
-      <Text
-        style={{
-          color: theme.text,
-          fontSize: theme.fontSize.lg,
-          fontFamily: theme.fontFamily.semibold,
-          fontWeight: "600",
-        }}
-      >
-        {profile?.display_name ? `Hey, ${profile.display_name}` : "Welcome"}
-      </Text>
-
       <View style={{ alignItems: "center", marginVertical: theme.spacing(1) }}>
         <Pressable
           onPress={() => router.push("/workout")}

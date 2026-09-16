@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { Stack, useRouter, useSegments } from "expo-router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 import { SupabaseProvider, useSession } from "@athlete/supabase-client"
 import { ThemeProvider, gymTheme } from "@athlete/ui"
 
@@ -36,14 +37,16 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 
 export default function RootLayout() {
   return (
-    <SupabaseProvider url={SUPABASE_URL} anonKey={SUPABASE_ANON_KEY}>
-      <ThemeProvider theme={gymTheme}>
-        <QueryClientProvider client={queryClient}>
-          <AuthGate>
-            <Stack screenOptions={{ headerShown: false }} />
-          </AuthGate>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </SupabaseProvider>
+    <SafeAreaProvider>
+      <SupabaseProvider url={SUPABASE_URL} anonKey={SUPABASE_ANON_KEY}>
+        <ThemeProvider theme={gymTheme}>
+          <QueryClientProvider client={queryClient}>
+            <AuthGate>
+              <Stack screenOptions={{ headerShown: false }} />
+            </AuthGate>
+          </QueryClientProvider>
+        </ThemeProvider>
+      </SupabaseProvider>
+    </SafeAreaProvider>
   )
 }

@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { Stack, useRouter, useSegments } from "expo-router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ActivityIndicator } from "react-native"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 import {
   useFonts,
   PlusJakartaSans_400Regular,
@@ -63,18 +64,20 @@ export default function RootLayout() {
   })
 
   return (
-    <SupabaseProvider url={SUPABASE_URL} anonKey={SUPABASE_ANON_KEY}>
-      <ThemeProvider theme={basketballTheme}>
-        {!fontsLoaded ? (
-          <LoadingScreen />
-        ) : (
-          <QueryClientProvider client={queryClient}>
-            <AuthGate>
-              <Stack screenOptions={{ headerShown: false }} />
-            </AuthGate>
-          </QueryClientProvider>
-        )}
-      </ThemeProvider>
-    </SupabaseProvider>
+    <SafeAreaProvider>
+      <SupabaseProvider url={SUPABASE_URL} anonKey={SUPABASE_ANON_KEY}>
+        <ThemeProvider theme={basketballTheme}>
+          {!fontsLoaded ? (
+            <LoadingScreen />
+          ) : (
+            <QueryClientProvider client={queryClient}>
+              <AuthGate>
+                <Stack screenOptions={{ headerShown: false }} />
+              </AuthGate>
+            </QueryClientProvider>
+          )}
+        </ThemeProvider>
+      </SupabaseProvider>
+    </SafeAreaProvider>
   )
 }
