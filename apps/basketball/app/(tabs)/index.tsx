@@ -37,7 +37,7 @@ export default function Home() {
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
         <Image
           source={require("../../assets/logo-wide.png")}
-          style={{ width: 150, height: 44 }}
+          style={{ width: 240, height: 51 }}
           resizeMode="contain"
           accessibilityLabel="DimeSkill"
         />
