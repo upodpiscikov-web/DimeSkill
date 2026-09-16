@@ -1,13 +1,13 @@
-import { Text } from "react-native"
+import { Ionicons } from "@expo/vector-icons"
 import { Tabs } from "expo-router"
 import { useTheme } from "@athlete/ui"
 
-const ICONS: Record<string, string> = {
-  index: "🏠",
-  log: "➕",
-  history: "📊",
-  achievements: "🏆",
-  profile: "👤",
+const ICONS: Record<string, { active: keyof typeof Ionicons.glyphMap; inactive: keyof typeof Ionicons.glyphMap }> = {
+  index: { active: "home", inactive: "home-outline" },
+  log: { active: "add-circle", inactive: "add-circle-outline" },
+  history: { active: "stats-chart", inactive: "stats-chart-outline" },
+  achievements: { active: "trophy", inactive: "trophy-outline" },
+  profile: { active: "person", inactive: "person-outline" },
 }
 
 export default function TabsLayout() {
@@ -21,7 +21,13 @@ export default function TabsLayout() {
         tabBarStyle: { backgroundColor: theme.surface, borderTopColor: theme.border },
         tabBarActiveTintColor: theme.accent,
         tabBarInactiveTintColor: theme.textMuted,
-        tabBarIcon: () => <Text style={{ fontSize: 18 }}>{ICONS[route.name]}</Text>,
+        tabBarIcon: ({ color, size, focused }) => (
+          <Ionicons
+            name={focused ? ICONS[route.name].active : ICONS[route.name].inactive}
+            color={color}
+            size={size}
+          />
+        ),
       })}
     >
       <Tabs.Screen name="index" options={{ title: "Home" }} />
