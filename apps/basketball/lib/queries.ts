@@ -41,6 +41,143 @@ export function useCreateBasketballSession() {
   })
 }
 
+export function useBasketballSession(id: string | undefined) {
+  const supabase = useSupabase()
+  return useQuery({
+    queryKey: ["basketball_sessions", "detail", id],
+    enabled: !!id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("basketball_sessions")
+        .select("*")
+        .eq("id", id!)
+        .single()
+      if (error) throw error
+      return data
+    },
+  })
+}
+
+export function useUpdateBasketballSession() {
+  const supabase = useSupabase()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      id,
+      ...input
+    }: TablesUpdate<"basketball_sessions"> & { id: string }) => {
+      const { data, error } = await supabase
+        .from("basketball_sessions")
+        .update(input)
+        .eq("id", id)
+        .select()
+        .single()
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["basketball_sessions"] })
+      queryClient.invalidateQueries({ queryKey: ["user_achievements"] })
+    },
+  })
+}
+
+export function useDeleteBasketballSession() {
+  const supabase = useSupabase()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("basketball_sessions").delete().eq("id", id)
+      if (error) throw error
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["basketball_sessions"] })
+      queryClient.invalidateQueries({ queryKey: ["basketball_drills"] })
+    },
+  })
+}
+
+export function useBasketballDrills(sessionId: string | undefined) {
+  const supabase = useSupabase()
+  return useQuery({
+    queryKey: ["basketball_drills", sessionId],
+    enabled: !!sessionId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("basketball_drills")
+        .select("*")
+        .eq("session_id", sessionId!)
+      if (error) throw error
+      return data
+    },
+  })
+}
+
+export function useCreateBasketballDrills() {
+  const supabase = useSupabase()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (drills: TablesInsert<"basketball_drills">[]) => {
+      if (drills.length === 0) return []
+      const { data, error } = await supabase.from("basketball_drills").insert(drills).select()
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["basketball_drills"] })
+    },
+  })
+}
+
+export function useTrainingPlans() {
+  const supabase = useSupabase()
+  const { session } = useSession()
+  return useQuery({
+    queryKey: ["training_plans", session?.user.id],
+    enabled: !!session,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("training_plans")
+        .select("*")
+        .eq("sport", "basketball")
+        .order("created_at", { ascending: false })
+      if (error) throw error
+      return data
+    },
+  })
+}
+
+export function useActiveTrainingPlan() {
+  const { data: plans } = useTrainingPlans()
+  return plans?.find((p) => p.is_active) ?? null
+}
+
+export function useActivateTrainingPlan() {
+  const supabase = useSupabase()
+  const { session } = useSession()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (input: Omit<TablesInsert<"training_plans">, "user_id" | "sport">) => {
+      if (!session) throw new Error("Not signed in")
+      await supabase
+        .from("training_plans")
+        .update({ is_active: false })
+        .eq("user_id", session.user.id)
+        .eq("sport", "basketball")
+      const { data, error } = await supabase
+        .from("training_plans")
+        .insert({ ...input, sport: "basketball", user_id: session.user.id, is_active: true })
+        .select()
+        .single()
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["training_plans"] })
+    },
+  })
+}
+
 export function useReactionDrillResults() {
   const supabase = useSupabase()
   const { session } = useSession()
@@ -90,7 +227,8 @@ export function useUserAchievements() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("user_achievements")
-        .select("*, achievement:achievements(*)")
+        .select("*, achievement:achievements!inner(*)")
+        .in("achievement.sport", ["basketball", "both"])
         .order("earned_at", { ascending: false })
       if (error) throw error
       return data

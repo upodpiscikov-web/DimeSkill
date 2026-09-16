@@ -80,7 +80,8 @@ export function useUserAchievements() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("user_achievements")
-        .select("*, achievement:achievements(*)")
+        .select("*, achievement:achievements!inner(*)")
+        .in("achievement.sport", ["gym", "both"])
         .order("earned_at", { ascending: false })
       if (error) throw error
       return data

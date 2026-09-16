@@ -19,7 +19,8 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     const inAuthGroup = segments[0] === "(auth)"
     const inTabsGroup = segments[0] === "(tabs)"
     const inLegalGroup = segments[0] === "legal"
-    const isStandaloneAuthedRoute = segments[0] === "edit-profile"
+    const isStandaloneAuthedRoute =
+      segments[0] === "edit-profile" || segments[0] === "session" || segments[0] === "plan"
 
     if (inLegalGroup) return
 
