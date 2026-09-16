@@ -29,7 +29,7 @@ export default function SignUp() {
     <ScreenContainer scroll={false}>
       <View style={{ flex: 1, justifyContent: "center", gap: theme.spacing(2) }}>
         <Text style={{ color: theme.accent, fontSize: theme.fontSize.sm, fontWeight: "700" }}>
-          HOOPY COACH
+          DIMESKILL
         </Text>
         <Text style={{ color: theme.text, fontSize: theme.fontSize.xxl, fontWeight: "700" }}>
           Create your account
